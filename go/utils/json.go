@@ -24,9 +24,7 @@ func ReadJSONFile[T any](filename string) (*T, error) {
 func PrettyPrintJSON(data interface{}, indent uint) ([]byte, error) {
 	// generate spaces according to indent
 	spaces := func(indent uint) string {
-		if indent > PrettyPrintMaxIndent {
-			indent = PrettyPrintMaxIndent
-		}
+		indent = min(indent, PrettyPrintMaxIndent)
 
 		spaces := make([]byte, indent)
 		for i := range spaces {
