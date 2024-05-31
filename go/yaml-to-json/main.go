@@ -57,7 +57,7 @@ func main() {
 		_, err = os.Stdout.Write(jsonBytes)
 	}
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
 	}
 }
