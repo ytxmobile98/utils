@@ -8,12 +8,10 @@ import (
 	"github.com/ytxmobile98/utils/go/utils"
 )
 
-type Args struct {
+var args struct {
 	inputFilename  string
 	outputFilename string
 }
-
-var args Args
 
 func init() {
 	parseArgs := func() {

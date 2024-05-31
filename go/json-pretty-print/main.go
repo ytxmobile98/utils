@@ -8,14 +8,12 @@ import (
 	"github.com/ytxmobile98/utils/go/utils"
 )
 
-type Args struct {
+var args struct {
 	inputFilename  string
 	outputFilename string
 
 	indent uint
 }
-
-var args Args
 
 const defaultIndent uint = 4
 
