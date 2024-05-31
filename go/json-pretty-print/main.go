@@ -39,17 +39,13 @@ func init() {
 }
 
 func main() {
-	if len(os.Args) < 2 {
-		fmt.Fprintln(os.Stderr, "Usage: json-pretty-print <input_filename>")
-		os.Exit(1)
-	}
-
 	inputFilename := args.inputFilename
 	output, err := utils.PrettyPrintJSONFile(inputFilename, args.indent)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
 	}
+
 	if args.outputFilename != "" {
 		err = os.WriteFile(args.outputFilename, output, 0644)
 	} else {
