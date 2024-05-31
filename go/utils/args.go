@@ -7,6 +7,9 @@ import (
 )
 
 func ParseFlagsAndCheckErrors(defineAndParseArgs func(), checkAndAppendErrs func(errs *[]error), exitCode int) {
+	if flag.Parsed() {
+		return
+	}
 	defineAndParseArgs()
 	if !flag.Parsed() {
 		flag.Parse()
