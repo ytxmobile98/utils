@@ -9,7 +9,7 @@ import (
 )
 
 type Args struct {
-	inputFileName  string
+	inputFilename  string
 	outputFilename string
 
 	prettyPrintIndent uint
@@ -19,7 +19,7 @@ var args Args
 
 func init() {
 	parseArgs := func() {
-		flag.StringVar(&args.inputFileName, "i", "", "input yaml file (required)")
+		flag.StringVar(&args.inputFilename, "i", "", "input yaml file (required)")
 		flag.StringVar(&args.outputFilename, "o", "", "output json file (optional; if not specified, write to stdout)")
 
 		flag.UintVar(&args.prettyPrintIndent, "p", 0, fmt.Sprintf("number of spaces used for pretty indent, max: %d", utils.PrettyPrintMaxIndent))
@@ -28,7 +28,7 @@ func init() {
 	}
 
 	checkArgs := func(errs *[]error) {
-		if args.inputFileName == "" {
+		if args.inputFilename == "" {
 			*errs = append(*errs, fmt.Errorf("input yaml file is required"))
 		}
 	}
@@ -37,7 +37,7 @@ func init() {
 }
 
 func main() {
-	yamlBytes, err := os.ReadFile(args.inputFileName)
+	yamlBytes, err := os.ReadFile(args.inputFilename)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
