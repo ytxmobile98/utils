@@ -23,9 +23,7 @@ func ReadYAMLFromFile[T any](filename string) (result *T, err error) {
 // Convert YAML to JSON
 // If prettyIndent is specified, use it to pretty print the JSON output
 func YAMLToJSON(input []byte, prettyIndent uint) (output []byte, err error) {
-	var data interface{}
-
-	data, err = ReadYAMLData[interface{}](input)
+	data, err := ReadYAMLData[interface{}](input)
 	if err != nil {
 		return nil, err
 	}
