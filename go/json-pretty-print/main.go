@@ -19,5 +19,5 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
 	}
-	fmt.Println(output)
+	fmt.Println(string(output))
 }
