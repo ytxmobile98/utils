@@ -16,6 +16,8 @@ func init() {
 type Args struct {
 	inputFileName  string
 	outputFilename string
+
+	prettyPrintIndent uint
 }
 
 var args Args
@@ -23,6 +25,8 @@ var args Args
 func parseCmdLineArgs() {
 	flag.StringVar(&args.inputFileName, "i", "", "input yaml file (required)")
 	flag.StringVar(&args.outputFilename, "o", "", "output json file (optional; if not specified, write to stdout)")
+
+	flag.UintVar(&args.prettyPrintIndent, "p", 0, fmt.Sprintf("number of spaces used for pretty indent, max: %d", utils.PrettyPrintMaxIndent))
 
 	flag.Parse()
 }
@@ -53,9 +57,10 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
 	}
-	jsonBytes, err := utils.YAMLToJSON(yamlBytes)
+
+	jsonBytes, err := utils.YAMLToJSON(yamlBytes, args.prettyPrintIndent)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
 	}
 
