@@ -15,9 +15,9 @@ type Args struct {
 	indent uint
 }
 
-const defaultIndent uint = 4
-
 var args Args
+
+const defaultIndent uint = 4
 
 func init() {
 	parseArgs := func() {
