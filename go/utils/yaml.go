@@ -35,3 +35,15 @@ func YAMLToJSON(input []byte, prettyIndent uint) (output []byte, err error) {
 	}
 	return MarshalJSONData(data)
 }
+
+// Convert JSON to YAML
+func JSONToYAML(input []byte) (output []byte, err error) {
+	var data interface{}
+
+	data, err = ReadJSONData[interface{}](input)
+	if err != nil {
+		return nil, err
+	}
+
+	return yaml.Marshal(data)
+}
