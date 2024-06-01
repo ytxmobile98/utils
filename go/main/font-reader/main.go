@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	fontFile := "/usr/share/fonts/fonts-go/Go-Medium.ttf"
+	fontFile := "/usr/share/fonts/truetype/noto/NotoSans-Light.ttf"
 	bytes, _ := os.ReadFile(fontFile)
 	font, _ := sfnt.Parse(bytes)
 
@@ -59,6 +59,8 @@ func main() {
 	}
 
 	for _, item := range fontInfo {
-		fmt.Printf("%+v\n", item)
+		if item.data != "" {
+			fmt.Printf("%+v\n", item)
+		}
 	}
 }
