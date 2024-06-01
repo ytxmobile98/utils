@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	fontFile := "/usr/share/fonts/fonts-go/Go-Regular.ttf"
+	fontFile := "/usr/share/fonts/fonts-go/Go-Medium.ttf"
 	bytes, _ := os.ReadFile(fontFile)
 	font, _ := sfnt.Parse(bytes)
 
