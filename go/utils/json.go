@@ -21,7 +21,7 @@ func ReadJSONFile[T any](filename string) (*T, error) {
 	return ReadJSONData[T](bytes)
 }
 
-func PrettyPrintJSON(data interface{}, indent uint) ([]byte, error) {
+func PrettyPrintJSON(data any, indent uint) ([]byte, error) {
 	// generate spaces according to indent
 	spaces := func(indent uint) string {
 		indent = min(indent, PrettyPrintMaxIndent)
@@ -41,13 +41,13 @@ func PrettyPrintJSON(data interface{}, indent uint) ([]byte, error) {
 }
 
 func PrettyPrintJSONFile(filename string, indent uint) ([]byte, error) {
-	data, err := ReadJSONFile[interface{}](filename)
+	data, err := ReadJSONFile[any](filename)
 	if err != nil {
 		return nil, err
 	}
 	return PrettyPrintJSON(data, indent)
 }
 
-func MarshalJSONData(data interface{}) ([]byte, error) {
+func MarshalJSONData(data any) ([]byte, error) {
 	return json.Marshal(data)
 }
