@@ -15,25 +15,25 @@ var args struct {
 	indent uint
 }
 
-const defaultIndent uint = 4
+const defaultIndent = utils.PrettyPrintDefaultIndent
 
 func init() {
-	parseArgs := func() {
-		flag.StringVar(&args.inputFilename, "i", "", "input json file (required)")
-		flag.StringVar(&args.outputFilename, "o", "", "output json file (optional; if not specified, write to stdout)")
+	utils.ParseFlagsAndCheckErrors(defineAndParseArgs, checkArgs, 1)
+}
 
-		flag.UintVar(&args.indent, "p", defaultIndent, fmt.Sprintf("number of spaces used for pretty indent, max: %d; default: %d", utils.PrettyPrintMaxIndent, defaultIndent))
+func defineAndParseArgs() {
+	flag.StringVar(&args.inputFilename, "i", "", "input json file (required)")
+	flag.StringVar(&args.outputFilename, "o", "", "output json file (optional; if not specified, write to stdout)")
 
-		flag.Parse()
+	flag.UintVar(&args.indent, "p", defaultIndent, fmt.Sprintf("number of spaces used for pretty indent, max: %d; default: %d", utils.PrettyPrintMaxIndent, defaultIndent))
+
+	flag.Parse()
+}
+
+func checkArgs(errs *[]error) {
+	if args.inputFilename == "" {
+		*errs = append(*errs, fmt.Errorf("input json file is required"))
 	}
-
-	checkArgs := func(errs *[]error) {
-		if args.inputFilename == "" {
-			*errs = append(*errs, fmt.Errorf("input json file is required"))
-		}
-	}
-
-	utils.ParseFlagsAndCheckErrors(parseArgs, checkArgs, 1)
 }
 
 func main() {

@@ -16,22 +16,22 @@ var args struct {
 }
 
 func init() {
-	parseArgs := func() {
-		flag.StringVar(&args.inputFilename, "i", "", "input yaml file (required)")
-		flag.StringVar(&args.outputFilename, "o", "", "output json file (optional; if not specified, write to stdout)")
+	utils.ParseFlagsAndCheckErrors(defineAndParseArgs, checkArgs, 1)
+}
 
-		flag.UintVar(&args.prettyPrintIndent, "p", 0, fmt.Sprintf("number of spaces used for pretty indent, max: %d", utils.PrettyPrintMaxIndent))
+func defineAndParseArgs() {
+	flag.StringVar(&args.inputFilename, "i", "", "input yaml file (required)")
+	flag.StringVar(&args.outputFilename, "o", "", "output json file (optional; if not specified, write to stdout)")
 
-		flag.Parse()
+	flag.UintVar(&args.prettyPrintIndent, "p", 0, fmt.Sprintf("number of spaces used for pretty indent, max: %d", utils.PrettyPrintMaxIndent))
+
+	flag.Parse()
+}
+
+func checkArgs(errs *[]error) {
+	if args.inputFilename == "" {
+		*errs = append(*errs, fmt.Errorf("input yaml file is required"))
 	}
-
-	checkArgs := func(errs *[]error) {
-		if args.inputFilename == "" {
-			*errs = append(*errs, fmt.Errorf("input yaml file is required"))
-		}
-	}
-
-	utils.ParseFlagsAndCheckErrors(parseArgs, checkArgs, 1)
 }
 
 func main() {
