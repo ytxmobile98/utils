@@ -5,7 +5,10 @@ import (
 	"os"
 )
 
-const PrettyPrintMaxIndent = 10
+const (
+	PrettyPrintDefaultIndent uint = 4
+	PrettyPrintMaxIndent     uint = 10
+)
 
 func ReadJSONData[T any](bytes []byte) (*T, error) {
 	var result T
