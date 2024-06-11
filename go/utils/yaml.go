@@ -10,7 +10,7 @@ func ReadYAMLData[T any](bytes []byte) (*T, error) {
 	return &result, err
 }
 
-func ReadYAMLFromFile[T any](filename string) (result *T, err error) {
+func ReadYAMLFromFile[T any](filename string) (*T, error) {
 	bytes, err := ReadFile(filename)
 	if err != nil {
 		return nil, err
@@ -20,7 +20,7 @@ func ReadYAMLFromFile[T any](filename string) (result *T, err error) {
 
 // Convert YAML to JSON
 // If prettyIndent is specified, use it to pretty print the JSON output
-func YAMLToJSON(input []byte, prettyIndent uint) (output []byte, err error) {
+func YAMLToJSON(input []byte, prettyIndent uint) ([]byte, error) {
 	data, err := ReadYAMLData[any](input)
 	if err != nil {
 		return nil, err
@@ -33,7 +33,7 @@ func YAMLToJSON(input []byte, prettyIndent uint) (output []byte, err error) {
 }
 
 // Convert JSON to YAML
-func JSONToYAML(input []byte) (output []byte, err error) {
+func JSONToYAML(input []byte) ([]byte, error) {
 	data, err := ReadJSONData[any](input)
 	if err != nil {
 		return nil, err
