@@ -40,11 +40,7 @@ func main() {
 		os.Exit(2)
 	}
 
-	if args.outputFilename != "" {
-		err = os.WriteFile(args.outputFilename, output, 0644)
-	} else {
-		_, err = os.Stdout.Write(output)
-	}
+	_, err = utils.WriteFile(args.outputFilename, output)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)

@@ -43,13 +43,7 @@ func main() {
 		os.Exit(2)
 	}
 
-	// write to output
-	// if output file not specified, write to stdout
-	if args.outputFilename != "" {
-		err = os.WriteFile(args.outputFilename, jsonBytes, 0644)
-	} else {
-		_, err = os.Stdout.Write(jsonBytes)
-	}
+	_, err = utils.WriteFile(args.outputFilename, jsonBytes)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
