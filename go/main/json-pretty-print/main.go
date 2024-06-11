@@ -22,7 +22,7 @@ func init() {
 }
 
 func defineAndParseArgs() {
-	flag.StringVar(&args.inputFilename, "i", "", "input json file (required)")
+	flag.StringVar(&args.inputFilename, "i", "", "input json file (optional; if not specified, read from stdin)")
 	flag.StringVar(&args.outputFilename, "o", "", "output json file (optional; if not specified, write to stdout)")
 
 	flag.UintVar(&args.indent, "p", defaultIndent, fmt.Sprintf("number of spaces used for pretty indent, max: %d; default: %d", utils.PrettyPrintMaxIndent, defaultIndent))
@@ -30,11 +30,7 @@ func defineAndParseArgs() {
 	flag.Parse()
 }
 
-func checkArgs(errs *[]error) {
-	if args.inputFilename == "" {
-		*errs = append(*errs, fmt.Errorf("input json file is required"))
-	}
-}
+func checkArgs(errs *[]error) {}
 
 func main() {
 	inputFilename := args.inputFilename

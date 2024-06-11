@@ -2,7 +2,6 @@ package utils
 
 import (
 	"encoding/json"
-	"os"
 )
 
 const (
@@ -17,7 +16,7 @@ func ReadJSONData[T any](bytes []byte) (*T, error) {
 }
 
 func ReadJSONFile[T any](filename string) (*T, error) {
-	bytes, err := os.ReadFile(filename)
+	bytes, err := ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
