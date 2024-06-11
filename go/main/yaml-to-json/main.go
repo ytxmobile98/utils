@@ -20,7 +20,7 @@ func init() {
 }
 
 func defineAndParseArgs() {
-	flag.StringVar(&args.inputFilename, "i", "", "input yaml file (required)")
+	flag.StringVar(&args.inputFilename, "i", "", "input yaml file (optional; if not specified, read from stdin)")
 	flag.StringVar(&args.outputFilename, "o", "", "output json file (optional; if not specified, write to stdout)")
 
 	flag.UintVar(&args.prettyPrintIndent, "p", 0, fmt.Sprintf("number of spaces used for pretty indent, max: %d", utils.PrettyPrintMaxIndent))
@@ -28,14 +28,10 @@ func defineAndParseArgs() {
 	flag.Parse()
 }
 
-func checkArgs(errs *[]error) {
-	if args.inputFilename == "" {
-		*errs = append(*errs, fmt.Errorf("input yaml file is required"))
-	}
-}
+func checkArgs(errs *[]error) {}
 
 func main() {
-	yamlBytes, err := os.ReadFile(args.inputFilename)
+	yamlBytes, err := utils.ReadFile(args.inputFilename)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
