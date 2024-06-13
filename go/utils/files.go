@@ -40,6 +40,8 @@ func WriteFile(filename string, bytes []byte) (int, error) {
 		if err != nil {
 			return 0, err
 		}
+		defer file.Close()
+
 		return file.Write(bytes)
 	} else {
 		// filename is not specified, write to stdout
