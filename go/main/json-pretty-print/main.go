@@ -33,8 +33,7 @@ func defineAndParseArgs() {
 func checkArgs(errs *[]error) {}
 
 func main() {
-	inputFilename := args.inputFilename
-	output, err := utils.PrettyPrintJSONFile(inputFilename, args.indent)
+	output, err := utils.PrettyPrintJSONFile(args.inputFilename, args.indent)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(2)
