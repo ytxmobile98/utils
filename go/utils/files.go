@@ -15,20 +15,8 @@ func ReadFile(filename string) (bytes []byte, err error) {
 	if filename != "" {
 		return os.ReadFile(filename)
 	} else {
-		// read from stdin
-		buffer := [BufferSize]byte{}
-		var n int
-		for err == nil {
-			n, err = os.Stdin.Read(buffer[:])
-			if n > 0 {
-				bytes = append(bytes, buffer[:n]...)
-			}
-		}
-		if err == io.EOF {
-			err = nil
-		}
+		return io.ReadAll(os.Stdin)
 	}
-	return
 }
 
 // Write the given bytes to a file.
