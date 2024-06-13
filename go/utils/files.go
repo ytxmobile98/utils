@@ -36,3 +36,19 @@ func WriteFile(filename string, bytes []byte) (int, error) {
 		return os.Stdout.Write(bytes)
 	}
 }
+
+type Converter func([]byte) ([]byte, error)
+
+func Convert(inputFilename string, outputFilename string, convert Converter) (n int, err error) {
+	bytes, err := ReadFile(inputFilename)
+	if err != nil {
+		return
+	}
+
+	bytes, err = convert(bytes)
+	if err != nil {
+		return
+	}
+
+	return WriteFile(outputFilename, bytes)
+}

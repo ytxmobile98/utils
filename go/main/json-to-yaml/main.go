@@ -2,8 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	"os"
 
 	"github.com/ytxmobile98/utils/go/utils"
 )
@@ -27,21 +25,10 @@ func defineAndParseArgs() {
 func checkArgs(errs *[]error) {}
 
 func main() {
-	jsonBytes, err := utils.ReadFile(args.inputFilename)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(2)
-	}
+	var converter utils.Converter = utils.JSONToYAML
 
-	yamlBytes, err := utils.JSONToYAML(jsonBytes)
+	_, err := utils.Convert(args.inputFilename, args.outputFilename, converter)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(2)
-	}
-
-	_, err = utils.WriteFile(args.outputFilename, yamlBytes)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(2)
+		panic(err)
 	}
 }

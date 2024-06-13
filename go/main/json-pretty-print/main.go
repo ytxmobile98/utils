@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
 
 	"github.com/ytxmobile98/utils/go/utils"
 )
@@ -33,15 +32,16 @@ func defineAndParseArgs() {
 func checkArgs(errs *[]error) {}
 
 func main() {
-	output, err := utils.PrettyPrintJSONFile(args.inputFilename, args.indent)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(2)
+	var converter utils.Converter = func(bytes []byte) ([]byte, error) {
+		data, err := utils.ReadJSONData[any](bytes)
+		if err != nil {
+			return nil, err
+		}
+		return utils.PrettyPrintJSON(data, args.indent)
 	}
 
-	_, err = utils.WriteFile(args.outputFilename, output)
+	_, err := utils.Convert(args.inputFilename, args.outputFilename, converter)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(2)
+		panic(err)
 	}
 }
