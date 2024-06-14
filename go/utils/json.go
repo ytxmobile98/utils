@@ -23,23 +23,31 @@ func ReadJSONFile[T any](filename string) (*T, error) {
 	return ReadJSONData[T](bytes)
 }
 
-func PrettyPrintJSON(data any, indent uint) ([]byte, error) {
-	// generate spaces according to indent
-	spaces := func(indent uint) string {
-		indent = min(indent, PrettyPrintMaxIndent)
+// Marshal JSON data.
+// If indent is 0, then simply marshal the data.
+// If indent is greater than 0, then pretty print the JSON data using the specified indent.
+// Maximum indent is `PrettyPrintMaxIndent`.
+func MarshalJSON(data any, indent uint) ([]byte, error) {
+	if indent == 0 {
+		return json.Marshal(data)
+	} else {
+		// generate spaces according to indent
+		spaces := func(indent uint) string {
+			indent = min(indent, PrettyPrintMaxIndent)
 
-		spaces := make([]byte, indent)
-		for i := range spaces {
-			spaces[i] = ' '
+			spaces := make([]byte, indent)
+			for i := range spaces {
+				spaces[i] = ' '
+			}
+			return string(spaces)
+		}(indent)
+
+		bytes, err := json.MarshalIndent(data, "", spaces)
+		if err != nil {
+			return nil, err
 		}
-		return string(spaces)
-	}(indent)
-
-	bytes, err := json.MarshalIndent(data, "", spaces)
-	if err != nil {
-		return nil, err
+		return bytes, nil
 	}
-	return bytes, nil
 }
 
 func PrettyPrintJSONFile(filename string, indent uint) ([]byte, error) {
@@ -47,9 +55,5 @@ func PrettyPrintJSONFile(filename string, indent uint) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return PrettyPrintJSON(data, indent)
-}
-
-func MarshalJSONData(data any) ([]byte, error) {
-	return json.Marshal(data)
+	return MarshalJSON(data, indent)
 }

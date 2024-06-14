@@ -33,13 +33,7 @@ func defineAndParseArgs() {
 func checkArgs(errs *[]error) {}
 
 func main() {
-	var converter converters.Converter = func(bytes []byte) ([]byte, error) {
-		data, err := utils.ReadJSONData[any](bytes)
-		if err != nil {
-			return nil, err
-		}
-		return utils.PrettyPrintJSON(data, args.indent)
-	}
+	var converter converters.Converter = converters.GetJSONLayoutConverter(args.indent)
 
 	_, err := converters.Convert(args.inputFilename, args.outputFilename, converter)
 	if err != nil {

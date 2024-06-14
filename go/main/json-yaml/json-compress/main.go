@@ -26,13 +26,7 @@ func defineAndParseArgs() {
 func checkArgs(errs *[]error) {}
 
 func main() {
-	var converter converters.Converter = func(bytes []byte) ([]byte, error) {
-		data, err := utils.ReadJSONData[any](bytes)
-		if err != nil {
-			return nil, err
-		}
-		return utils.MarshalJSONData(data)
-	}
+	var converter converters.Converter = converters.GetJSONLayoutConverter(0)
 
 	_, err := converters.Convert(args.inputFilename, args.outputFilename, converter)
 	if err != nil {
