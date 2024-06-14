@@ -17,3 +17,7 @@ func ReadYAMLFromFile[T any](filename string) (*T, error) {
 	}
 	return ReadYAMLData[T](bytes)
 }
+
+func MarshalYAML(data any) ([]byte, error) {
+	return yaml.Marshal(data)
+}

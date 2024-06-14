@@ -2,7 +2,6 @@ package converters
 
 import (
 	"github.com/ytxmobile98/utils/go/utils"
-	"gopkg.in/yaml.v3"
 )
 
 type Converter func([]byte) ([]byte, error)
@@ -27,7 +26,7 @@ func JSONToYAML(input []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return yaml.Marshal(data)
+	return utils.MarshalYAML(data)
 }
 
 // Convert YAML to JSON.
@@ -37,7 +36,6 @@ func YAMLToJSON(input []byte, indent uint) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return utils.MarshalJSON(data, indent)
 }
 
