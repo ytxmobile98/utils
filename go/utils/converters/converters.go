@@ -1,13 +1,14 @@
-package utils
+package converters
 
 import (
+	"github.com/ytxmobile98/utils/go/utils"
 	"gopkg.in/yaml.v3"
 )
 
 type Converter func([]byte) ([]byte, error)
 
 func Convert(inputFilename string, outputFilename string, convert Converter) (n int, err error) {
-	bytes, err := ReadFile(inputFilename)
+	bytes, err := utils.ReadFile(inputFilename)
 	if err != nil {
 		return
 	}
@@ -17,12 +18,12 @@ func Convert(inputFilename string, outputFilename string, convert Converter) (n 
 		return
 	}
 
-	return WriteFile(outputFilename, bytes)
+	return utils.WriteFile(outputFilename, bytes)
 }
 
 // Convert JSON to YAML
 func JSONToYAML(input []byte) ([]byte, error) {
-	data, err := ReadJSONData[any](input)
+	data, err := utils.ReadJSONData[any](input)
 	if err != nil {
 		return nil, err
 	}
@@ -32,15 +33,15 @@ func JSONToYAML(input []byte) ([]byte, error) {
 // Convert YAML to JSON
 // If prettyIndent is specified, use it to pretty print the JSON output
 func YAMLToJSON(input []byte, prettyIndent uint) ([]byte, error) {
-	data, err := ReadYAMLData[any](input)
+	data, err := utils.ReadYAMLData[any](input)
 	if err != nil {
 		return nil, err
 	}
 
 	if prettyIndent > 0 {
-		return PrettyPrintJSON(data, prettyIndent)
+		return utils.PrettyPrintJSON(data, prettyIndent)
 	}
-	return MarshalJSONData(data)
+	return utils.MarshalJSONData(data)
 }
 
 // Get the converter function by specifying the pretty print indent

@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/ytxmobile98/utils/go/utils"
+	"github.com/ytxmobile98/utils/go/utils/converters"
 )
 
 var args struct {
@@ -32,7 +33,7 @@ func defineAndParseArgs() {
 func checkArgs(errs *[]error) {}
 
 func main() {
-	var converter utils.Converter = func(bytes []byte) ([]byte, error) {
+	var converter converters.Converter = func(bytes []byte) ([]byte, error) {
 		data, err := utils.ReadJSONData[any](bytes)
 		if err != nil {
 			return nil, err
@@ -40,7 +41,7 @@ func main() {
 		return utils.PrettyPrintJSON(data, args.indent)
 	}
 
-	_, err := utils.Convert(args.inputFilename, args.outputFilename, converter)
+	_, err := converters.Convert(args.inputFilename, args.outputFilename, converter)
 	if err != nil {
 		panic(err)
 	}

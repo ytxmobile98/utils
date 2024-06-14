@@ -4,6 +4,7 @@ import (
 	"flag"
 
 	"github.com/ytxmobile98/utils/go/utils"
+	"github.com/ytxmobile98/utils/go/utils/converters"
 )
 
 var args struct {
@@ -25,9 +26,9 @@ func defineAndParseArgs() {
 func checkArgs(errs *[]error) {}
 
 func main() {
-	var converter utils.Converter = utils.JSONToYAML
+	var converter converters.Converter = converters.JSONToYAML
 
-	_, err := utils.Convert(args.inputFilename, args.outputFilename, converter)
+	_, err := converters.Convert(args.inputFilename, args.outputFilename, converter)
 	if err != nil {
 		panic(err)
 	}
