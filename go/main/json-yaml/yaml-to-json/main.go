@@ -30,9 +30,7 @@ func defineAndParseArgs() {
 func checkArgs(errs *[]error) {}
 
 func main() {
-	var converter utils.Converter = func(bytes []byte) ([]byte, error) {
-		return utils.YAMLToJSON(bytes, args.prettyPrintIndent)
-	}
+	var converter utils.Converter = utils.GetYAMLToJSONConverter(args.prettyPrintIndent)
 
 	_, err := utils.Convert(args.inputFilename, args.outputFilename, converter)
 	if err != nil {
