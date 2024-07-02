@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"strings"
 )
 
 const (
@@ -31,17 +32,7 @@ func MarshalJSON(data any, indent uint) ([]byte, error) {
 	if indent == 0 {
 		return json.Marshal(data)
 	} else {
-		// generate spaces according to indent
-		spaces := func(indent uint) string {
-			indent = min(indent, PrettyPrintMaxIndent)
-
-			spaces := make([]byte, indent)
-			for i := range spaces {
-				spaces[i] = ' '
-			}
-			return string(spaces)
-		}(indent)
-
+		spaces := getSpaces(indent)
 		bytes, err := json.MarshalIndent(data, "", spaces)
 		if err != nil {
 			return nil, err
@@ -56,4 +47,15 @@ func PrettyPrintJSONFile(filename string, indent uint) ([]byte, error) {
 		return nil, err
 	}
 	return MarshalJSON(data, indent)
+}
+
+// generate spaces according to indent
+func getSpaces(indent uint) string {
+	indent = min(indent, PrettyPrintMaxIndent)
+
+	spaces := strings.Builder{}
+	for i := uint(0); i < indent; i++ {
+		spaces.WriteByte(' ')
+	}
+	return spaces.String()
 }
