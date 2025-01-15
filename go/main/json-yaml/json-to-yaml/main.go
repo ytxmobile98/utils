@@ -28,7 +28,7 @@ func checkArgs(errs *[]error) {}
 func main() {
 	var converter converters.Converter = converters.JSONToYAML
 
-	_, err := converters.Convert(args.inputFilename, args.outputFilename, converter)
+	_, err := converters.ConvertFile(args.inputFilename, args.outputFilename, converter)
 	if err != nil {
 		panic(err)
 	}

@@ -10,6 +10,7 @@ import (
 
 var args struct {
 	inputFilename  string
+	inputJsonText  string
 	outputFilename string
 
 	indent uint
@@ -22,7 +23,8 @@ func init() {
 }
 
 func defineAndParseArgs() {
-	flag.StringVar(&args.inputFilename, "i", "", "input json file (optional; if not specified, read from stdin)")
+	flag.StringVar(&args.inputFilename, "i", "", "input json file")
+	flag.StringVar(&args.inputJsonText, "t", "", "input json text (either -i or -t is required)")
 	flag.StringVar(&args.outputFilename, "o", "", "output json file (optional; if not specified, write to stdout)")
 
 	flag.UintVar(&args.indent, "p", defaultIndent, fmt.Sprintf("number of spaces used for pretty indent, max: %d; default: %d", utils.PrettyPrintMaxIndent, defaultIndent))
@@ -35,7 +37,16 @@ func checkArgs(errs *[]error) {}
 func main() {
 	var converter converters.Converter = converters.GetJSONLayoutConverter(args.indent)
 
-	_, err := converters.Convert(args.inputFilename, args.outputFilename, converter)
+	var err error
+	if args.inputFilename != "" {
+		_, err = converters.ConvertFile(args.inputFilename, args.outputFilename, converter)
+	} else if args.inputJsonText != "" {
+		var bytes []byte
+		bytes, err = converters.ConvertBytes([]byte(args.inputJsonText), converter)
+		fmt.Println(string(bytes))
+	} else {
+		err = fmt.Errorf("no JSON input specified")
+	}
 	if err != nil {
 		panic(err)
 	}
