@@ -41,14 +41,6 @@ func MarshalJSON(data any, indent uint) ([]byte, error) {
 	}
 }
 
-func PrettyPrintJSONFile(filename string, indent uint) ([]byte, error) {
-	data, err := ReadJSONFile[any](filename)
-	if err != nil {
-		return nil, err
-	}
-	return MarshalJSON(data, indent)
-}
-
 // generate spaces according to indent
 func getSpaces(indent uint) string {
 	indent = min(indent, PrettyPrintMaxIndent)
