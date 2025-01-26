@@ -10,7 +10,7 @@ import (
 
 var args struct {
 	inputFilename  string
-	inputJsonText  string
+	inputJSONText  string
 	outputFilename string
 
 	indent uint
@@ -23,9 +23,9 @@ func init() {
 }
 
 func defineAndParseArgs() {
-	flag.StringVar(&args.inputFilename, "i", "", "input json file")
-	flag.StringVar(&args.inputJsonText, "t", "", "input json text (either -i or -t is required)")
-	flag.StringVar(&args.outputFilename, "o", "", "output json file (optional; if not specified, write to stdout)")
+	flag.StringVar(&args.inputFilename, "i", "", "input JSON file (optional)")
+	flag.StringVar(&args.inputJSONText, "t", "", "input JSON text (optional； if both `-i` and `-t` are not specified, read from stdin)")
+	flag.StringVar(&args.outputFilename, "o", "", "output JSON file (optional; if not specified, write to stdout)")
 
 	flag.UintVar(&args.indent, "p", defaultIndent, fmt.Sprintf("number of spaces used for pretty indent, max: %d; default: %d", utils.PrettyPrintMaxIndent, defaultIndent))
 
@@ -37,16 +37,30 @@ func checkArgs(errs *[]error) {}
 func main() {
 	var converter converters.Converter = converters.GetJSONLayoutConverter(args.indent)
 
-	var err error
-	if args.inputFilename != "" {
-		_, err = converters.ConvertFile(args.inputFilename, args.outputFilename, converter)
-	} else if args.inputJsonText != "" {
-		var bytes []byte
-		bytes, err = converters.ConvertBytes([]byte(args.inputJsonText), converter)
-		fmt.Println(string(bytes))
-	} else {
-		err = fmt.Errorf("no JSON input specified")
-	}
+	var err = func() (err error) {
+		if args.inputFilename != "" {
+			// If input filename is set, read from the file.
+			_, err = converters.ConvertFile(
+				args.inputFilename, args.outputFilename, converter)
+			return
+		} else if args.inputJSONText != "" {
+			// If input JSON text is set, convert it.
+			_, err = converters.ConvertBytes(
+				[]byte(args.inputJSONText), args.outputFilename, converter)
+			return
+		} else {
+			// Read from stdin.
+			var bytes []byte
+			bytes, err = utils.ReadFile("")
+			if err != nil {
+				return
+			}
+			_, err = converters.ConvertBytes(
+				bytes, args.outputFilename, converter)
+			return
+		}
+	}()
+
 	if err != nil {
 		panic(err)
 	}

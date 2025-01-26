@@ -20,6 +20,16 @@ func ConvertFile(inputFilename string, outputFilename string, convert Converter)
 	return utils.WriteFile(outputFilename, bytes)
 }
 
-func ConvertBytes(input []byte, convert Converter) ([]byte, error) {
-	return convert(input)
+func ConvertBytes(input []byte, outputFilename string, convert Converter) ([]byte, error) {
+	bytes, err := convert(input)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = utils.WriteFile(outputFilename, bytes)
+	if err != nil {
+		return nil, err
+	}
+
+	return bytes, nil
 }
