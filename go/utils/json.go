@@ -1,8 +1,8 @@
 package utils
 
 import (
+	"bytes"
 	"encoding/json"
-	"strings"
 )
 
 const (
@@ -29,23 +29,29 @@ func ReadJSONFile[T any](filename string) (*T, error) {
 // If indent is greater than 0, then pretty print the JSON data using the specified indent.
 // Maximum indent is `PrettyPrintMaxIndent`.
 func MarshalJSON(data any, indent uint) ([]byte, error) {
-	if indent == 0 {
-		return json.Marshal(data)
-	} else {
-		spaces := getSpaces(indent)
-		bytes, err := json.MarshalIndent(data, "", spaces)
-		if err != nil {
-			return nil, err
-		}
-		return bytes, nil
+	// By default, json.Marshal() escapes selected HTML characters.
+	// To avoid this, we use `json.Encoder` and set `SetEscapeHTML(false)`.
+	// Reference: https://pkg.go.dev/encoding/json#Encoder.SetEscapeHTML
+	buf := bytes.Buffer{}
+	encoder := json.NewEncoder(&buf)
+	encoder.SetEscapeHTML(false)
+	encoder.SetIndent("", getSpaces(indent))
+
+	err := encoder.Encode(data)
+	if err != nil {
+		return nil, err
 	}
+	return buf.Bytes(), nil
 }
 
 // generate spaces according to indent
 func getSpaces(indent uint) string {
-	indent = min(indent, PrettyPrintMaxIndent)
+	if indent == 0 {
+		return ""
+	}
 
-	spaces := strings.Builder{}
+	indent = min(indent, PrettyPrintMaxIndent)
+	spaces := bytes.Buffer{}
 	for i := uint(0); i < indent; i++ {
 		spaces.WriteByte(' ')
 	}
